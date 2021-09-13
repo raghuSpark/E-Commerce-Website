@@ -1,0 +1,23 @@
+[
+    {
+        "id": "1234",
+        "title": "Ignited Minds",
+        "imageUrl": "https://images-na.ssl-images-amazon.com/images/I/81y66NkOkpL.jpg",
+        "description": "Authored by the most influential Indian President yet, this book delves into the obstacles that are preventing India from rising up to the challenge of development.",
+        "price": "149"
+    },
+    {
+        "id": "2345",
+        "title": "Steve Jobs!",
+        "imageUrl": "https://images-na.ssl-images-amazon.com/images/I/81VStYnDGrL.jpg",
+        "description": "This is a riveting book, with as much to say about the transformation of modern life in the information age as about its supernaturally gifted and driven subject!",
+        "price": "387.79"
+    },
+    {
+        "id": "0.5705491384398091",
+        "title": "Macbook Pro",
+        "imageUrl": "https://store.storeimages.cdn-apple.com/4668/as-images.apple.com/is/mbp16touch-space-select-201911?wid=904&hei=840&fmt=jpeg&qlt=80&.v=1572825197207",
+        "description": "All systems Pro. Now available with Apple-designed M1 chip. Buy direct from Apple. For a limited time, buy an eligible Mac with education pricing and get AirPods.",
+        "price": "179000"
+    }
+]

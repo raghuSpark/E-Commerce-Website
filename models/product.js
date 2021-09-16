@@ -120,33 +120,102 @@
 
 // sequelize
 
-const Sequlize = require('sequelize');
+// const Sequlize = require('sequelize');
 
-const sequlize = require('../util/database');
+// const sequlize = require('../util/database');
 
-const Product = sequlize.define('product', {
-    id: {
-        type: Sequlize.INTEGER,
-        autoIncrement: true,
-        allowNull: false,
-        primaryKey: true
-    },
-    title: {
-        type: Sequlize.STRING,
-        allowNull: false
-    },
-    price: {
-        type: Sequlize.DOUBLE,
-        allowNull: false
-    },
-    imageUrl: {
-        type: Sequlize.STRING,
-        allowNull: false
-    },
-    description: {
-        type: Sequlize.STRING,
-        allowNull: false
+// const Product = sequlize.define('product', {
+//     id: {
+//         type: Sequlize.INTEGER,
+//         autoIncrement: true,
+//         allowNull: false,
+//         primaryKey: true
+//     },
+//     title: {
+//         type: Sequlize.STRING,
+//         allowNull: false
+//     },
+//     price: {
+//         type: Sequlize.DOUBLE,
+//         allowNull: false
+//     },
+//     imageUrl: {
+//         type: Sequlize.STRING,
+//         allowNull: false
+//     },
+//     description: {
+//         type: Sequlize.STRING,
+//         allowNull: false
+//     }
+// });
+
+const mongoDb = require('mongodb');
+const getDb = require('../util/database').getDb;
+
+class Product {
+    constructor(title, price, description, imageUrl, id, userID) {
+        this.title = title;
+        this.price = price;
+        this.description = description;
+        this.imageUrl = imageUrl;
+        this._id = id ? new mongoDb.ObjectId(id) : null;
+        this.userID = userID;
     }
-});
+
+    save() {
+        const db = getDb();
+        let dbOp;
+        console.log("this._id");
+        console.log(this._id);
+        if (this._id) {
+            // update the product
+            dbOp = db.collection('products')
+                .updateOne(
+                    { _id: this._id },
+                    { $set: this });
+        } else {
+            dbOp = db.collection('products')
+                .insertOne(this);
+        }
+        return dbOp
+            .then(result => {
+                console.log(result);
+            })
+            .catch(err => console.log(err));
+    }
+
+    static fetchAll() {
+        const db = getDb();
+        return db.collection('products')
+            .find().toArray()
+            .then(products => {
+                console.log(products);
+                return products;
+            })
+            .catch(err => console.log(err));
+    }
+
+    static findById(prodId) {
+        const db = getDb();
+        return db.collection('products')
+            .find({ _id: new mongoDb.ObjectId(prodId) })
+            .next()
+            .then(product => {
+                console.log(product);
+                return product;
+            })
+            .catch(err => console.log(err));
+    }
+
+    static deleteById(prodId) {
+        const db = getDb();
+        return db.collection('products')
+            .deleteOne({ _id: new mongoDb.ObjectId(prodId) })
+            .then(result => {
+                console.log('Deleted!');
+            })
+            .catch(err => console.log(err));
+    }
+};
 
 module.exports = Product;

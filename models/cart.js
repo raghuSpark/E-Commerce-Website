@@ -69,17 +69,21 @@ module.exports = class Cart {
 };
 ****/
 
-const Sequilize = require('sequelize');
+// const Sequilize = require('sequelize');
 
-const sequelize = require('../util/database');
+// const sequelize = require('../util/database');
 
-const Cart = sequelize.define('cart', {
-    id: {
-        type: Sequilize.INTEGER,
-        autoIncrement: true,
-        allowNull: false,
-        primaryKey: true
-    }
-});
+// const Cart = sequelize.define('cart', {
+//     id: {
+//         type: Sequilize.INTEGER,
+//         autoIncrement: true,
+//         allowNull: false,
+//         primaryKey: true
+//     }
+// });
 
-module.exports = Cart;
+// module.exports = Cart;
+
+/**
+ * No need of cart model while using mongo db. It can be done in user model itself!
+ **/

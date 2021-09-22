@@ -113,6 +113,7 @@ exports.getIndex = (req, res, next) => {
     // Product.findAll().then(products => {
     Product.fetchAll()
         .then(products => {
+            console.log("fetch all");
             res.render('shop/index', {
                 prods: products,
                 pageTitle: 'Shop',
@@ -182,6 +183,7 @@ exports.postCart = (req, res, next) => {
 
     Product.findById(prodId)
         .then(product => {
+            console.log(product);
             return req.user.addToCart(product);
         })
         .then(result => {

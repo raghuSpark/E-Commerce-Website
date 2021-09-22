@@ -40,7 +40,7 @@ exports.postAddProduct = (req, res, next) => {
     //         res.redirect('/admin/products');
     //     })
     //     .catch(err => console.log(err));
-
+    console.log("test");
     const product = new Product(title, price, description, imageUrl, null, req.user._id);
     product.save()
         .then(() => {

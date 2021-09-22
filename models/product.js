@@ -165,7 +165,6 @@ class Product {
     save() {
         const db = getDb();
         let dbOp;
-        console.log("this._id");
         console.log(this._id);
         if (this._id) {
             // update the product
@@ -189,7 +188,6 @@ class Product {
         return db.collection('products')
             .find().toArray()
             .then(products => {
-                console.log(products);
                 return products;
             })
             .catch(err => console.log(err));
@@ -201,7 +199,6 @@ class Product {
             .find({ _id: new mongoDb.ObjectId(prodId) })
             .next()
             .then(product => {
-                console.log(product);
                 return product;
             })
             .catch(err => console.log(err));

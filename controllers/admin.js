@@ -40,9 +40,16 @@ exports.postAddProduct = (req, res, next) => {
     //         res.redirect('/admin/products');
     //     })
     //     .catch(err => console.log(err));
-    console.log("test");
-    const product = new Product(title, price, description, imageUrl, null, req.user._id);
-    product.save()
+    // const product = new Product(title, price, description, imageUrl, null, req.user._id);
+    const product = new Product({
+        title: title,
+        price: price,
+        description: description,
+        imageUrl: imageUrl,
+        userId: req.user
+    });
+    product
+        .save()
         .then(() => {
             console.log("Created a product!");
             res.redirect('/admin/products');
@@ -131,8 +138,23 @@ exports.postEditProduct = (req, res, next) => {
     //     .catch(err => console.log(err));
     // res.redirect('/admin/products');
 
-    const product = new Product(updatedTitle, updatedPrice, updatedDesc, updatedImageUrl, prodId);
-    product.save()
+    // const product = new Product(updatedTitle, updatedPrice, updatedDesc, updatedImageUrl, prodId);
+    // product.save()
+    //     .then(result => {
+    //         console.log('PRODUCT IS UPDATED!')
+    //         res.redirect('/admin/products');
+    //     })
+    //     .catch(err => console.log(err));
+
+    Product.findById(prodId)
+        .then(product => {
+            product.title = updatedTitle;
+            product.price = updatedPrice;
+            product.description = updatedDesc;
+            product.imageUrl = updatedImageUrl;
+            product.userId = req.user;
+            return product.save();
+        })
         .then(result => {
             console.log('PRODUCT IS UPDATED!')
             res.redirect('/admin/products');
@@ -154,7 +176,8 @@ exports.postDeleteProduct = (req, res, next) => {
     //     .catch(err => console.log(err));
     // res.redirect('/admin/products');
 
-    Product.deleteById(prodId)
+    // Product.deleteById(prodId)
+    Product.findByIdAndRemove(prodId)
         .then(() => {
             console.log('PRODUCT DESTROYED!');
             res.redirect('/admin/products');
@@ -183,7 +206,10 @@ exports.getProducts = (req, res, next) => {
     //     });
     // });
 
-    Product.fetchAll()
+    // Product.fetchAll()
+    Product.find()
+        // .select('title price -_id')
+        // .populate('userId', 'name')
         .then(products => {
             res.render('admin/products', {
                 prods: products,

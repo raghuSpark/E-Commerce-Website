@@ -22,6 +22,10 @@ const sequelize = new Sequelize('node-complete', 'root', 'Q!w2E#r4T%y6',
 module.exports = sequelize;
 ***/
 
+
+// NOT NEEDED WHEN USING MONGOOSE
+/****
+
 const mongodb = require('mongodb');
 const MongoClient = mongodb.MongoClient;
 
@@ -49,3 +53,5 @@ const getDb = () => {
 
 exports.mongoConnect = mongoConnect;
 exports.getDb = getDb;
+
+****/

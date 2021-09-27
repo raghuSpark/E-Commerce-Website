@@ -5,6 +5,8 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 
+var cookieParser = require('cookie-parser');
+
 const errorController = require('./controllers/error');
 
 // const mongoConnect = require('./util/database').mongoConnect;
@@ -29,6 +31,7 @@ app.set('views', 'views');
 
 const adminRoutes = require('./routes/admin');
 const shopRoutes = require('./routes/shop');
+const authRoutes = require('./routes/auth');
 
 // db.execute('select * from products')
 //     .then((result) => {
@@ -40,6 +43,8 @@ const shopRoutes = require('./routes/shop');
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
+
+app.use(cookieParser());
 
 app.use((req, res, next) => {
     // User.findByPk(1)
@@ -60,6 +65,7 @@ app.use((req, res, next) => {
 
 app.use('/admin', adminRoutes);
 app.use(shopRoutes);
+app.use(authRoutes);
 
 // app.use('/add-product', (req, res, next) => {
 //     res.send('<form action="/product" method="POST"><input type="text" name="title"><button type="submit">ADD PRODUCT</button></form>');

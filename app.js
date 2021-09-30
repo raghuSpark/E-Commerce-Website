@@ -4,8 +4,10 @@ const path = require('path');
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
+const session = require('express-session');
+const MonogDBStore = require('connect-mongodb-session')(session);
 
-var cookieParser = require('cookie-parser');
+// var cookieParser = require('cookie-parser');
 
 const errorController = require('./controllers/error');
 
@@ -24,7 +26,13 @@ const Order = require('./models/order');
 const OrderItem = require('./models/order-item');
 ***/
 
+const MONGODB_URI = 'mongodb+srv://raghu:kkksYdteATASA3zO@e-commerce.plaoz.mongodb.net/shop?w=majority';
+
 const app = express();
+const store = new MonogDBStore({
+    uri: MONGODB_URI,
+    collection: 'sessions'
+});
 
 app.set('view engine', 'ejs');
 app.set('views', 'views');
@@ -43,8 +51,16 @@ const authRoutes = require('./routes/auth');
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(
+    session({
+        secret: 'my secret',
+        resave: false,
+        saveUninitialized: false,
+        store: store
+    })
+);
 
-app.use(cookieParser());
+// app.use(cookieParser());
 
 app.use((req, res, next) => {
     // User.findByPk(1)
@@ -54,7 +70,10 @@ app.use((req, res, next) => {
     //     })
     //     .catch(err => console.log(err));
 
-    User.findById("614ebfafe81bc69ba182d880")
+    if (!req.session.user) {
+        return next();
+    }
+    User.findById(req.session.user._id)
         .then(user => {
             // req.user = new User(user.name, user.email, user.cart, user._id);
             req.user = user;
@@ -140,9 +159,7 @@ sequelize
 //     app.listen(3000);
 // });
 
-mongoose.connect(
-    'mongodb+srv://musk:hsU4eaigFKYsp4nA@e-commerce.hqz2z.mongodb.net/shop?retryWrites=true&w=majority'
-)
+mongoose.connect(MONGODB_URI)
     .then(result => {
         User.findOne()
             .then(user => {
